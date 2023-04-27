@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  orders:
+    container_name: orders
+    build: .
+    command: ["/app/run_orders.sh"]
+    env_file:
+      - ./.env
+    depends_on:
+      - orders_db
+
+  orders_db:
+    container_name: orders_db
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+
+networks:
+  default:
+    name: crm-net
+    external: true
+
+volumes:
+  postgres_data:
